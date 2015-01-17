@@ -5,6 +5,14 @@
 
     <title>Such awesome. Much wow.</title>
     <style>
+      html {
+        box-sizing: border-box;
+      }
+  
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+  
       body {
         background: url(doge.jpg) no-repeat center top fixed;
         -webkit-background-size: cover;
@@ -20,6 +28,8 @@
         font-family: "Comic Sans MS", "Comic Sans", cursive;
         font-size: 35px;
         position: absolute;
+        width: 33%;
+        line-height: 1.3;
       }
     </style>
 
@@ -55,20 +65,25 @@
           setPositionRanges();
         }
 
-        var left = index % 2 ? '20px' : 'auto';
-        var right = index % 2 ? 'auto' : '20px';
+        var isLeft = _.sample([true, false]);
+        var left = isLeft ? randomBetween(0, 15) : 'auto';
+        var right = isLeft ? 'auto': randomBetween(0, 15);
         var colorToUse = Math.floor((Math.random() * 5));
         var newNode = $('<div></div>').addClass('doge-text')
                                       .text(textOptions[index])
                                       .css({
                                         'color': '#' + colorOptions[colorToUse],
-                                        'left': left,
-                                        'right': right,
+                                        'left': left + '%',
+                                        'right': right + '%',
                                         'top': positionRanges[index]
                                       });
         $('body').append(newNode);
         index = index + 1;
       };
+
+      var randomBetween = function(min, max) {
+        return Math.floor(Math.random()*(max - min + 1) + min)
+      }
 
       var setPositionRanges = function() {
         var windowHeight = $(window).height();
@@ -78,7 +93,7 @@
           var min = positionRangeBand * i + 50;
           var max = positionRangeBand * (i + 1) - 50;
 
-          positionRanges.push(Math.floor(Math.random()*(max - min + 1) + min));
+          positionRanges.push(randomBetween(min, max));
         }
 
         positionRanges = _.sample(positionRanges, positionRanges.length);
