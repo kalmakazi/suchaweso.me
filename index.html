@@ -35,19 +35,23 @@
     </style>
 
     <script>
-      var textOptions = [
-        'such awesome',
-        'very wow',
-        'amaze',
-        'much doge',
-        'such domain name',
-        'so hack',
-        'very pennapps'
+      var textStart = [
+        'very',
+        'such',
+        'so',
+        'much',
+        'great'
       ];
+
+      var textEnd = [
+        'awesome',
+        'wow',
+        'amaze',
+        'pennapps',
+        'doge'
+      ];
+
       var positionRanges = [];
-
-      textOptions = _.sample(textOptions, textOptions.length);
-
       var colorOptions = [
         'bd5cfe',
         '32df00',
@@ -59,11 +63,8 @@
       var index = 0;
 
       var addTextNode = function() {
-        if (index > textOptions.length) {
+        if (index === 0) {
           $('.doge-text').remove();
-          textOptions = _.sample(textOptions, textOptions.length);
-          index = -1;
-          setPositionRanges();
         }
 
         var isLeft = _.sample([true, false]);
@@ -71,7 +72,7 @@
         var right = isLeft ? 'auto': randomBetween(0, 15);
         var colorToUse = Math.floor((Math.random() * 5));
         var newNode = $('<div></div>').addClass('doge-text')
-                                      .text(textOptions[index])
+                                      .text(textOptions[index].join(' '))
                                       .css({
                                         'color': '#' + colorOptions[colorToUse],
                                         'left': left + '%',
@@ -80,11 +81,24 @@
                                       });
         $('body').append(newNode);
         index = index + 1;
+
+        if (index > textOptions.length - 1) {
+          index = 0;
+          setTextOptions();
+          setPositionRanges();
+        }
       };
 
       var randomBetween = function(min, max) {
         return Math.floor(Math.random()*(max - min + 1) + min)
       }
+
+      var setTextOptions = function() {
+        textStart = _.sample(textStart, textStart.length);
+        textEnd = _.sample(textEnd, textEnd.length);
+
+        textOptions = _.zip(textStart, textEnd);
+      };
 
       var setPositionRanges = function() {
         var windowHeight = $(window).height();
@@ -101,6 +115,7 @@
       };
 
       $(function() {
+        setTextOptions();
         setPositionRanges();
         setInterval(addTextNode, 1000);
       });
