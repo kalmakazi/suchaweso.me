@@ -72,10 +72,11 @@
 
       var setPositionRanges = function() {
         var windowHeight = $(window).height();
-        var positionRangeBand = windowHeight / (textOptions.length + 1);
+        positionRanges = [];
+        var positionRangeBand = windowHeight / (textOptions.length);
         for (var i = 0; i < (textOptions.length - 1); i++) {
-          var min = positionRangeBand * i;
-          var max = positionRangeBand * (i + 1);
+          var min = positionRangeBand * i + 50;
+          var max = positionRangeBand * (i + 1) - 50;
 
           positionRanges.push(Math.floor(Math.random()*(max - min + 1) + min));
         }
@@ -84,7 +85,6 @@
       };
 
       $(function() {
-
         setPositionRanges();
         setInterval(addTextNode, 1000);
       });
