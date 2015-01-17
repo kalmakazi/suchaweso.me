@@ -1,5 +1,8 @@
 <html>
   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+
     <title>Such awesome. Much wow.</title>
     <style>
       body {
@@ -8,10 +11,84 @@
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
-	margin: 0;
+        margin: 0;
         padding: 0;
       }
+
+      .doge-text {
+        display: inline-block;
+        font-family: "Comic Sans MS", "Comic Sans", cursive;
+        font-size: 35px;
+        position: absolute;
+      }
     </style>
+
+    <script>
+      var textOptions = [
+        'such awesome',
+        'very wow',
+        'amaze',
+        'much doge',
+        'such domain name',
+        'so hack',
+        'very pennapps'
+      ];
+      var positionRanges = [];
+
+      textOptions = _.sample(textOptions, textOptions.length);
+
+      var colorOptions = [
+        'bd5cfe',
+        '32df00',
+        '03eba6',
+        '2faace',
+        'ff4848'
+      ];
+
+      var index = 0;
+
+      var addTextNode = function() {
+        if (index > textOptions.length) {
+          $('.doge-text').remove();
+          textOptions = _.sample(textOptions, textOptions.length);
+          index = -1;
+          setPositionRanges();
+        }
+
+        var left = index % 2 ? '20px' : 'auto';
+        var right = index % 2 ? 'auto' : '20px';
+        var colorToUse = Math.floor((Math.random() * 5));
+        var newNode = $('<div></div>').addClass('doge-text')
+                                      .text(textOptions[index])
+                                      .css({
+                                        'color': '#' + colorOptions[colorToUse],
+                                        'left': left,
+                                        'right': right,
+                                        'top': positionRanges[index]
+                                      });
+        $('body').append(newNode);
+        index = index + 1;
+      };
+
+      var setPositionRanges = function() {
+        var windowHeight = $(window).height();
+        var positionRangeBand = windowHeight / (textOptions.length + 1);
+        for (var i = 0; i < (textOptions.length - 1); i++) {
+          var min = positionRangeBand * i;
+          var max = positionRangeBand * (i + 1);
+
+          positionRanges.push(Math.floor(Math.random()*(max - min + 1) + min));
+        }
+
+        positionRanges = _.sample(positionRanges, positionRanges.length);
+      };
+
+      $(function() {
+
+        setPositionRanges();
+        setInterval(addTextNode, 1000);
+      });
+    </script>
   </head>
   <body>
   </body>
